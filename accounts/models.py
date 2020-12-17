@@ -11,7 +11,7 @@ class Account(models.Model):
     '''
 
     CURRENCY_CHOICES = (
-        (key, raw_table['CcyNm'])
+        (key, raw_table[key]['CcyNm'])
         for key in raw_table if key is not None  # Bug in iso4217 includes a key with value None
     )
     id = models.BigAutoField(primary_key=True)
@@ -35,9 +35,9 @@ class Transfer(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     date = models.DateTimeField(auto_now_add=True)
-    origin = models.ForeignKey(Account, on_delete=models.SET_NULL)
+    origin = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name='out_transfers')
     origin_balance = models.PositiveBigIntegerField(default=0)
-    destination = models.ForeignKey(Account, on_delete=models.SET_NULL)
+    destination = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name='in_transfers')
     destination_balance = models.PositiveBigIntegerField(default=0)
     cancelled = models.BooleanField(default=True)
 
