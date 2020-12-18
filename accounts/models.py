@@ -2,6 +2,7 @@ from django.db import models, NotSupportedError
 from iso4217 import raw_table
 from django_lock import lock
 from django.db.models import F
+from rest_framework.exceptions import ValidationError
 from django.db import transaction
 
 
@@ -51,10 +52,10 @@ class Transfer(models.Model):
                 #     with lock(f'account.{self.destination_id}'):
                 # Check for available funds
                 if not self.origin.currency == self.destination.currency:
-                    raise ValueError('Origin currency must match destination currency')
+                    raise ValidationError('Origin currency must match destination currency')
                 if not Account.objects\
                     .filter(id=self.origin_id, balance__gte=self.balance).exists():
-                    raise ValueError('Origin account has insufficient funds')
+                    raise ValidationError('Origin account has insufficient funds')
 
                 Account.objects.filter(id=self.origin_id).update(
                     balance=F('balance')-self.balance)
@@ -67,7 +68,7 @@ class Transfer(models.Model):
 
     def delete(self, *args, **kwargs):
         if self.cancelled is True:
-            raise ValueError('Transfer already cancelled')
+            raise ValidationError('Transfer already cancelled')
         with transaction.atomic():
             # Disable for testing purposes, a cache backend must be setup
             # Obtain locks for accounts, to a valid state and fix races between transfers
@@ -75,7 +76,7 @@ class Transfer(models.Model):
             #     with lock(f'account.{self.destination_id}'):
             # Check for available funds
             if not Account.objects.filter(id=self.destination_id, balance__gte=self.balance).exists():
-                raise ValueError('Destination account has insufficient funds')
+                raise ValidationError('Destination account has insufficient funds')
 
             Account.objects.filter(id=self.origin_id).update(
                 balance=F('balance')+self.balance)

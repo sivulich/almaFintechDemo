@@ -3,7 +3,8 @@ from .models import Account, Transfer
 
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('id', 'balance')
+    list_display = ('id', 'balance', 'currency')
+    readonly_fields = ['currency']
 
 
 class TransferAdmin(admin.ModelAdmin):
