@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -23,13 +24,14 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def transfers(self, request, id=None):
-        transfers = Transfer.objects.filter(origin_id=id)
+        transfers = Transfer.objects.filter(Q(origin_id=id) | Q(destination_id=id))
         serializer = TransferSerializer(transfers, many=True)
         return Response(serializer.data)
 
 
 class TransfersViewSet(mixins.ListModelMixin,
                        mixins.CreateModelMixin,
+                       mixins.DestroyModelMixin,
                        viewsets.GenericViewSet):
     serializer_class = TransferSerializer
     lookup_field = 'id'

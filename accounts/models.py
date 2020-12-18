@@ -42,7 +42,7 @@ class Transfer(models.Model):
     cancelled = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        # Check for creation
+        # Check for creation and update data
         if self.id is None:
             with transaction.atomic():
                 # Disable for testing purposes, a cache backend must be setup
@@ -61,6 +61,9 @@ class Transfer(models.Model):
                 Account.objects.filter(id=self.destination_id).update(
                     balance=F('balance') + self.balance)
                 return super(Transfer, self).save(*args, **kwargs)
+        else:
+            # Assume an admin or server made an edit, no need to make conciliation
+            return super(Transfer, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.cancelled is True:
@@ -73,11 +76,12 @@ class Transfer(models.Model):
             # Check for available funds
             if not Account.objects.filter(id=self.destination_id, balance__gte=self.balance).exists():
                 raise ValueError('Destination account has insufficient funds')
-            self.cancelled = True
-            self.save()
+
             Account.objects.filter(id=self.origin_id).update(
                 balance=F('balance')+self.balance)
             Account.objects.filter(id=self.destination_id).update(
                 balance=F('balance') - self.balance)
+            self.cancelled = True
+            self.save()
 
 
