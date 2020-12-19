@@ -2,6 +2,8 @@ asgiref==3.3.1
 Django==3.1.4
 djangorestframework==3.12.2
 djangorestframework-simplejwt==4.6.0
+iso4217==1.6.20180829
 PyJWT==1.7.1
 pytz==2020.4
+six==1.15.0
 sqlparse==0.4.1

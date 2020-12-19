@@ -51,7 +51,8 @@ class Transfer(models.Model):
                 # Should be used in conjunction with REDIS as cache backend
                 # with cache.lock(f'account.{self.origin_id}'):
                 #     with cache.lock(f'account.{self.destination_id}'):
-                # Check for available funds
+
+                # Check for same currency and available funds
                 if not self.origin.currency == self.destination.currency:
                     raise ValidationError('Origin currency must match destination currency')
                 if not Account.objects\
@@ -76,7 +77,8 @@ class Transfer(models.Model):
             # Should be used in conjunction with REDIS as cache backend
             # with cache.lock(f'account.{self.origin_id}'):
             #     with cache.lock(f'account.{self.destination_id}'):
-            # Check for available funds
+
+            # Check for available funds to return transfer
             if not Account.objects.filter(id=self.destination_id, balance__gte=self.balance).exists():
                 raise ValidationError('Destination account has insufficient funds')
 

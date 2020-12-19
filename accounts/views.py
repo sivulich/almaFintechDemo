@@ -30,15 +30,19 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def biggest(self, request):
+        # Annotate biggest account by currency
         accounts = self.get_queryset().values('currency').annotate(max_balance=Max('balance')).order_by()
         if accounts.exists():
+            # Create query for account matching biggest balance and currency
             q_statement = Q()
             for pair in accounts:
                 q_statement |= (Q(currency__exact=pair['currency']) & Q(balance=pair['max_balance']))
+            # Return biggest account of each currency
             model_set = self.get_queryset().filter(q_statement)
             serializer = AccountSerializer(model_set, many=True)
             return Response(serializer.data)
         return Response({})
+
 
 class TransfersViewSet(mixins.ListModelMixin,
                        mixins.CreateModelMixin,
@@ -55,9 +59,3 @@ class TransfersViewSet(mixins.ListModelMixin,
             return Transfer.objects.all()
         # If user is not staff only return its accounts
         return Transfer.objects.filter(origin__in=user.profile.accounts.all())
-
-
-
-
-
-
