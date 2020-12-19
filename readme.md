@@ -74,6 +74,10 @@ class Profile(models.Model):
     accounts = models.ManyToManyField(Account)
 ```
 
+#### Permissions
+
+Only admin user can view, edit or delete users and profiles. 
+
 
 ### Accounts
 This django app handles all the logic corresponding to management of accounts and transfers between them. This uses the following apis endpoints:
