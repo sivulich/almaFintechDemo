@@ -55,7 +55,7 @@ Two types of users where implemented:
 
  - Users can have many accounts listed in their profile.
  - Admins have full access to all models.
- - No balance concilitation was implemented for edits to account balances.
+ - No balance conciliation was implemented for edits to account balances.
  - No advanced database protection was used.
  - All secrets are provided on the code to make a simpler development, a .env should be used to distribute secrets in a real project.
   
