@@ -17,6 +17,7 @@ class LoginConfig(AppConfig):
                 admin.save()
             if not Profile.objects.filter(user__username='admin').exists():
                 Profile.objects.create(user=User.objects.get(username='admin'))
+
         # Catch exception on first migration and when migrating
         except Exception as e:
             return

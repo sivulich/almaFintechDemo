@@ -44,6 +44,7 @@ This django app handles all user logic.
 | /api/login/ | POST | Obtain token pair |
 | /api/login/refresh/ | POST | Refresh token |
 | /api/users/ | GET | List |
+| /api/users/ | POST | Create |
 | /api/users/{id} | GET | Retrieve |
 | /api/users/{id} | POST | Edit |
 | /api/users/{id} | PATCH | Partial Edit |
