@@ -5,6 +5,12 @@ This project was developed as a demonstration to Alma Fintech.
 The goal was to develop a simple electronic wallet model where you could create, manage and delete accounts, make 
 transfers to them and revert transfers.
 
+## Technologies
+The following technologies where used:
+ - Django Web Development Framework
+ - Django Rest Framework
+ - JWT authentication
+
 ## Running the project
 To run the project after cloning the project, creating a python environment is recommended:
 ```
@@ -32,6 +38,27 @@ the access token must be provided in the Authorization header as Bearer {access}
 
 For development purposes the default user is admin with password admin.
 
+## Top Level Description
+### Models
+This project uses 4 basic models:
+ - User: User model provided in the Django framework
+ - Profile: User extension to store specific information. Links a user to accounts he has access.
+ - Account: Holds a certain balance in a specific currency.
+ - Transfer: Represents an exchange of a certain balance between accounts of the same currency.
+
+### Users
+Two types of users where implemented:
+ - Admin: Has the is_staff flag on. Has full access to the backend.
+ - User: Has access to its accounts, he can only create transfers and return transfers that he received.
+ 
+### Considerations
+
+ - Users can have many accounts listed in their profile.
+ - Admins have full access to all models.
+ - No balance concilitation was implemented for edits to account balances.
+ - No advanced database protection was used.
+ - All secrets are provided on the code to make a simpler development, a .env should be used to distribute secrets in a real project.
+  
 ## Project structure
 ### almaFintech
 Alma fintech is the root of the project, contains the django settings and routing information.
