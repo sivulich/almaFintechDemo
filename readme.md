@@ -34,7 +34,7 @@ For development purposes the default user is admin with password admin.
 
 ## Project structure
 ### Accounts
-This django app handles all the login corresponding to management of accounts and transfers between them. This uses the following apis endpoints:
+This django app handles all the logic corresponding to management of accounts and transfers between them. This uses the following apis endpoints:
 
 | Path | Method | Action|
 |------|--------|-------|
