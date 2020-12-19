@@ -53,6 +53,8 @@ This django app handles all user logic.
 | /api/profiles/{user_id} | GET | Retrieve |
 | /api/profiles/{user_id} | POST | Edit |
 | /api/profiles/{user_id} | PATCH | Partial Edit |
+| /api/profiles/{user_id}/add_account | POST | Add account to user |
+| /api/profiles/{user_id}/remove_account | POST | Remove account to user |
 
 The profile model was defined to store additional information on users of the system.
 ```python
