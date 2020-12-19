@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Max
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -28,6 +28,17 @@ class AccountViewSet(viewsets.ModelViewSet):
         serializer = TransferSerializer(transfers, many=True)
         return Response(serializer.data)
 
+    @action(methods=['get'], detail=False)
+    def biggest(self, request):
+        accounts = self.get_queryset().values('currency').annotate(max_balance=Max('balance')).order_by()
+        if accounts.exists():
+            q_statement = Q()
+            for pair in accounts:
+                q_statement |= (Q(currency__exact=pair['currency']) & Q(balance=pair['max_balance']))
+            model_set = self.get_queryset().filter(q_statement)
+            serializer = AccountSerializer(model_set, many=True)
+            return Response(serializer.data)
+        return Response({})
 
 class TransfersViewSet(mixins.ListModelMixin,
                        mixins.CreateModelMixin,

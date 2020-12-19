@@ -1,9 +1,9 @@
 from django.db import models, NotSupportedError
 from iso4217 import raw_table
-from django_lock import lock
 from django.db.models import F
 from rest_framework.exceptions import ValidationError
 from django.db import transaction
+from django.core.cache import cache
 
 
 class Account(models.Model):
@@ -48,8 +48,9 @@ class Transfer(models.Model):
             with transaction.atomic():
                 # Disable for testing purposes, a cache backend must be setup
                 # Obtain locks for accounts, to a valid state and fix races between transfers
-                # with lock(f'account.{self.origin_id}'):
-                #     with lock(f'account.{self.destination_id}'):
+                # Should be used in conjunction with REDIS as cache backend
+                # with cache.lock(f'account.{self.origin_id}'):
+                #     with cache.lock(f'account.{self.destination_id}'):
                 # Check for available funds
                 if not self.origin.currency == self.destination.currency:
                     raise ValidationError('Origin currency must match destination currency')
@@ -72,8 +73,9 @@ class Transfer(models.Model):
         with transaction.atomic():
             # Disable for testing purposes, a cache backend must be setup
             # Obtain locks for accounts, to a valid state and fix races between transfers
-            # with lock(f'account.{self.origin_id}'):
-            #     with lock(f'account.{self.destination_id}'):
+            # Should be used in conjunction with REDIS as cache backend
+            # with cache.lock(f'account.{self.origin_id}'):
+            #     with cache.lock(f'account.{self.destination_id}'):
             # Check for available funds
             if not Account.objects.filter(id=self.destination_id, balance__gte=self.balance).exists():
                 raise ValidationError('Destination account has insufficient funds')
