@@ -51,6 +51,17 @@ Two types of users where implemented:
  - Admin: Has the is_staff flag on. Has full access to the backend.
  - User: Has access to its accounts, he can only create transfers and return transfers that he received.
  
+### Implemented APIs
+Four Apis where implemented:
+ - User: Allows an admin to view, create, edit and delete users.
+ - Profile: Allows an admin to view and edit a user profile.
+ - Accounts: Allows an admin to view, create, edit and delete accounts. Allows a user to view his accounts.
+ - Transfers: Allows an admin and a user to view, create and delete transfers.
+
+### Admin panel
+
+Admin user can access an administration panel at localhost:8000/admin to manage user creation and accounts with a simple GUI.
+
 ### Considerations
 
  - Users can have many accounts listed in their profile.
@@ -296,7 +307,3 @@ The permissions for this views where defined are defined between permisssions.py
  - Transfers cant be modified.
  - Transfers must be to and from accounts of the same currency.
  - Transfers can only be reverted from a receiving account.
-
-### Admin
-
-Admin user can access an administration panel at localhost:8000/admin to manage user creation and accounts with a simple GUI.
