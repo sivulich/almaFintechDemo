@@ -83,16 +83,16 @@ This django app handles all user logic.
 | /api/login/refresh/ | POST | Refresh token |
 | /api/users/ | GET | List |
 | /api/users/ | POST | Create |
-| /api/users/{id} | GET | Retrieve |
-| /api/users/{id} | POST | Edit |
-| /api/users/{id} | PATCH | Partial Edit |
-| /api/users/{id} | DELETE | Destroy |
+| /api/users/{id}/ | GET | Retrieve |
+| /api/users/{id}/ | POST | Edit |
+| /api/users/{id}/ | PATCH | Partial Edit |
+| /api/users/{id}/ | DELETE | Destroy |
 | /api/profiles/ | GET | List |
-| /api/profiles/{user_id} | GET | Retrieve |
-| /api/profiles/{user_id} | POST | Edit |
-| /api/profiles/{user_id} | PATCH | Partial Edit |
-| /api/profiles/{user_id}/add_account | POST | Add account to user |
-| /api/profiles/{user_id}/remove_account | POST | Remove account from user |
+| /api/profiles/{user_id}/ | GET | Retrieve |
+| /api/profiles/{user_id}/ | POST | Edit |
+| /api/profiles/{user_id}/ | PATCH | Partial Edit |
+| /api/profiles/{user_id}/add_account/ | POST | Add account to user |
+| /api/profiles/{user_id}/remove_account/ | POST | Remove account from user |
 
 The profile model was defined to store additional information on users of the system.
 ```python
@@ -124,16 +124,16 @@ This django app handles all the logic corresponding to management of accounts an
 |------|--------|-------|
 | /api/accounts/ | GET | List |
 | /api/accounts/ | POST | Create |
-| /api/accounts/{id} | GET | Retrieve |
-| /api/accounts/{id} | POST | Edit |
-| /api/accounts/{id} | PATCH | Partial Edit |
-| /api/accounts/{id} | DELETE | Destroy |
-| /api/accounts/{id}/transfers | GET | List account transfers |
-| /api/accounts/biggest | GET | List biggest account of each currency |
+| /api/accounts/{id}/ | GET | Retrieve |
+| /api/accounts/{id}/ | POST | Edit |
+| /api/accounts/{id}/ | PATCH | Partial Edit |
+| /api/accounts/{id}/ | DELETE | Destroy |
+| /api/accounts/{id}/transfers/ | GET | List account transfers |
+| /api/accounts/biggest/ | GET | List biggest account of each currency |
 | /api/transfers/ | GET | List |
 | /api/transfers/ | POST | Create |
-| /api/transfers/{id} | GET | Retrieve |
-| /api/accounts/{id} | DELETE | Destroy |
+| /api/transfers/{id}/ | GET | Retrieve |
+| /api/accounts/{id}/ | DELETE | Destroy |
 
 
 #### models.py
