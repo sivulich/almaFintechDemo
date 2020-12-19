@@ -33,6 +33,45 @@ the access token must be provided in the Authorization header as Bearer {access}
 For development purposes the default user is admin with password admin.
 
 ## Project structure
+### almaFintech
+Alma fintech is the root of the project, contains the django settings and routing information.
+
+### Login
+This django app handles all user logic. 
+
+| Path | Method | Action|
+|------|--------|-------|
+| /api/login/ | POST | Obtain token pair |
+| /api/login/refresh/ | POST | Refresh token |
+| /api/users/ | GET | List |
+| /api/users/{id} | GET | Retrieve |
+| /api/users/{id} | POST | Edit |
+| /api/users/{id} | PATCH | Partial Edit |
+| /api/users/{id} | DELETE | Destroy |
+| /api/profiles/ | GET | List |
+| /api/profiles/{user_id} | GET | Retrieve |
+| /api/profiles/{user_id} | POST | Edit |
+| /api/profiles/{user_id} | PATCH | Partial Edit |
+
+The profile model was defined to store additional information on users of the system.
+```python
+class Profile(models.Model):
+    ''' Profile model, used to store the extra information the base user model does not have
+        Attributes:
+            user            User to whom this profile belongs.
+            cuit            Unique tributary identification code.
+            phone           User phone.
+            company         User working company.
+            accounts        Accounts to which this user has access to.
+        '''
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    cuit = models.CharField(max_length=14, blank=True, null=True)
+    phone = models.CharField(max_length=32, blank=True, null=True)
+    company = models.CharField(max_length=32, blank=True, null=True)
+    accounts = models.ManyToManyField(Account)
+```
+
+
 ### Accounts
 This django app handles all the logic corresponding to management of accounts and transfers between them. This uses the following apis endpoints:
 
@@ -223,41 +262,6 @@ The permissions for this views where defined are defined between permisssions.py
  - Transfers cant be modified.
  - Transfers must be to and from accounts of the same currency.
  - Transfers can only be reverted from a receiving account.
-
-### Login
-This django app handles all user logic. 
-
-| Path | Method | Action|
-|------|--------|-------|
-| /api/login/ | POST | Obtain token pair |
-| /api/login/refresh/ | POST | Refresh token |
-| /api/users/ | GET | List |
-| /api/users/{id} | GET | Retrieve |
-| /api/users/{id} | POST | Edit |
-| /api/users/{id} | PATCH | Partial Edit |
-| /api/users/{id} | DELETE | Destroy |
-| /api/profiles/ | GET | List |
-| /api/profiles/{user_id} | GET | Retrieve |
-| /api/profiles/{user_id} | POST | Edit |
-| /api/profiles/{user_id} | PATCH | Partial Edit |
-
-The profile model was defined to store additional information on users of the system.
-```python
-class Profile(models.Model):
-    ''' Profile model, used to store the extra information the base user model does not have
-        Attributes:
-            user            User to whom this profile belongs.
-            cuit            Unique tributary identification code.
-            phone           User phone.
-            company         User working company.
-            accounts        Accounts to which this user has access to.
-        '''
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    cuit = models.CharField(max_length=14, blank=True, null=True)
-    phone = models.CharField(max_length=32, blank=True, null=True)
-    company = models.CharField(max_length=32, blank=True, null=True)
-    accounts = models.ManyToManyField(Account)
-```
 
 ### Admin
 
