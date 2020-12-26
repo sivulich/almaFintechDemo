@@ -114,7 +114,7 @@ class Profile(models.Model):
 
 #### Permissions
 
-Only admin user can view, edit or delete users and profiles. 
+Only admin user can create, edit or delete users and profiles. Users can view their profiles and their user model.
 
 
 ### Accounts
