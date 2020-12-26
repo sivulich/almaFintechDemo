@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from accounts.models import Account
+from .permissions import UserPermissions, ProfilePermissions
 from .serializers import UserSerializer, ProfileSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import viewsets, mixins
@@ -14,8 +14,15 @@ from .models import Profile
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     lookup_field = 'id'
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.all()
+    permission_classes = [IsAuthenticated, UserPermissions]
+
+    def get_queryset(self):
+        user = self.request.user
+        # If user is staff of the virtual wallet return all Accounts
+        if user.is_staff:
+            return User.objects.all()
+        # If user is not staff only return its accounts
+        return User.objects.filter(id=user.id)
 
     @action(methods=['get'], detail=True)
     def profile(self, request, id=None):
@@ -29,8 +36,15 @@ class ProfileViewSet(mixins.UpdateModelMixin,
                      viewsets.GenericViewSet):
     serializer_class = ProfileSerializer
     lookup_field = 'user_id'
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = Profile.objects.all()
+    permission_classes = [IsAuthenticated, ProfilePermissions]
+
+    def get_queryset(self):
+        user = self.request.user
+        # If user is staff of the virtual wallet return all Accounts
+        if user.is_staff:
+            return Profile.objects.all()
+        # If user is not staff only return its accounts
+        return Profile.objects.filter(user_id=user.id)
 
     @action(methods=['post'], detail=True)
     def add_account(self, request, user_id=None):
