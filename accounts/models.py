@@ -42,6 +42,9 @@ class Transfer(models.Model):
     balance = models.PositiveBigIntegerField(default=0)
     cancelled = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ['-date']
+
     def save(self, *args, **kwargs):
         # Check for creation and update data
         if self.id is None:
