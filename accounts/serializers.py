@@ -11,9 +11,15 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class TransferSerializer(serializers.ModelSerializer):
+    date = serializers.DateTimeField(read_only=True)
+    currency = serializers.SerializerMethodField(read_only=True)
+
+    def get_currency(self, obj):
+        return obj.origin.currency
+
     class Meta:
         model = Transfer
-        fields = ['id', 'origin', 'destination', 'balance', 'cancelled']
+        fields = ['id', 'date', 'origin', 'destination', 'currency', 'balance', 'cancelled']
         lookup_field = 'id'
 
 
